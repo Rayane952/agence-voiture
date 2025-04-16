@@ -1,0 +1,13 @@
+com\example\agencevoiture\repositories\ImageVehiculeRepository.class
+com\example\agencevoiture\entités\Vehicule.class
+com\example\agencevoiture\entités\ImageVehicule.class
+com\example\agencevoiture\entités\OptionVehicule.class
+com\example\agencevoiture\repositories\OptionVehiculeRepository.class
+com\example\agencevoiture\services\VehiculeService.class
+com\example\agencevoiture\services\CategorieService.class
+com\example\agencevoiture\controleurs\VehiculeController.class
+com\example\agencevoiture\controleurs\VehiculeApiController.class
+com\example\agencevoiture\AgenceVoitureApplication.class
+com\example\agencevoiture\entités\Categorie.class
+com\example\agencevoiture\repositories\CategorieRepository.class
+com\example\agencevoiture\repositories\VehiculeRepository.class
