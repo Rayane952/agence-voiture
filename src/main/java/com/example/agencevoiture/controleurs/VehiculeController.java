@@ -12,34 +12,51 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.util.List;
 
+/**
+ * Contrôleur Spring MVC pour la gestion des vues liées aux véhicules.
+ * Permet d'afficher la page d'accueil, les détails d'un véhicule, le formulaire d'ajout
+ * ainsi que l'initialisation des catégories de véhicules.
+ */
 @Controller
 public class VehiculeController {
 
+    /** Service pour gérer les véhicules. */
     @Autowired
     private VehiculeService vehiculeService;
 
+    /** Service pour gérer les catégories de véhicules. */
     @Autowired
     private CategorieService categorieService;
 
+    /**
+     * Affiche la page d'accueil avec la liste des véhicules et le formulaire d'ajout.
+     *
+     * @param model le modèle Spring contenant les données à afficher dans la vue
+     * @return le nom de la vue "index"
+     */
     @GetMapping("/")
     public String home(Model model) {
-        // Récupérer la liste des véhicules
         List<Vehicule> vehicules = vehiculeService.getAllVehicules();
         model.addAttribute("vehicules", vehicules);
 
-        // Créer un nouvel objet Vehicule vide pour le formulaire du modal
         Vehicule vehicule = new Vehicule();
-        // Définir une date d'arrivée par défaut
         vehicule.setDateArrivee(LocalDate.now());
         model.addAttribute("vehicule", vehicule);
 
-        // Récupérer la liste des catégories pour le select du formulaire
         List<Categorie> categories = categorieService.getAllCategories();
         model.addAttribute("categories", categories);
 
         return "index";
     }
 
+    /**
+     * Affiche les détails d’un véhicule selon son ID.
+     *
+     * @param id l'identifiant du véhicule
+     * @param model le modèle contenant les données à afficher
+     * @return le nom de la vue "vehicule-details"
+     * @throws IllegalArgumentException si le véhicule n’est pas trouvé
+     */
     @GetMapping("/vehicule/{id}")
     public String vehiculeDetails(@PathVariable Long id, Model model) {
         Vehicule vehicule = vehiculeService.getVehiculeById(id)
@@ -48,23 +65,29 @@ public class VehiculeController {
         return "vehicule-details";
     }
 
+    /**
+     * Enregistre un nouveau véhicule soumis via le formulaire.
+     *
+     * @param vehicule le véhicule à ajouter
+     * @return une redirection vers la page d'accueil
+     */
     @PostMapping("/vehicule/add")
     public String addVehicule(@ModelAttribute Vehicule vehicule) {
-        // Si la date d'arrivée n'est pas définie, utiliser la date actuelle
         if (vehicule.getDateArrivee() == null) {
             vehicule.setDateArrivee(LocalDate.now());
         }
 
-        // Par défaut, le véhicule est disponible
         vehicule.setDisponibilite(true);
-
-        // Sauvegarder le véhicule
         vehiculeService.saveVehicule(vehicule);
-
-        // Rediriger vers la page d'accueil
         return "redirect:/";
     }
 
+    /**
+     * Affiche le formulaire d’ajout de véhicule.
+     *
+     * @param model le modèle contenant un véhicule vide et la liste des catégories
+     * @return le nom de la vue "vehicule-form"
+     */
     @GetMapping("/vehicule/add")
     public String showAddForm(Model model) {
         model.addAttribute("vehicule", new Vehicule());
@@ -72,12 +95,14 @@ public class VehiculeController {
         return "vehicule-form";
     }
 
-    // Méthode pour initialiser la base de données avec quelques catégories si nécessaire
+    /**
+     * Initialise des catégories par défaut si aucune n’existe encore.
+     *
+     * @return une redirection vers la page d'accueil
+     */
     @GetMapping("/init-categories")
     public String initCategories() {
-        // Vérifier si des catégories existent déjà
         if (categorieService.getAllCategories().isEmpty()) {
-            // Créer quelques catégories de base
             Categorie berline = new Categorie();
             berline.setNom("Berline");
             berline.setDescription("Voiture à coffre séparé de l'habitacle");
