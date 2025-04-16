@@ -3,6 +3,7 @@ package com.example.agencevoiture.entités;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.math.BigInteger;
 
 
 @Entity
@@ -13,7 +14,7 @@ public class ImageVehicule {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_image")
-    private Long id;
+    private Integer id;
 
     @ManyToOne
     @JoinColumn(name = "id_vehicule")

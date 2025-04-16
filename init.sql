@@ -1,12 +1,12 @@
 -- Création des tables
 CREATE TABLE categorie (
-                           id_categorie SERIAL PRIMARY KEY,
+                           id_categorie BIGSERIAL PRIMARY KEY,
                            nom VARCHAR(50) NOT NULL,
                            description TEXT
 );
 
 CREATE TABLE vehicule (
-                          id_vehicule SERIAL PRIMARY KEY,
+                          id_vehicule BIGSERIAL PRIMARY KEY,
                           marque VARCHAR(50) NOT NULL,
                           modele VARCHAR(50) NOT NULL,
                           annee INT NOT NULL,
@@ -19,26 +19,26 @@ CREATE TABLE vehicule (
                           nombre_places INT,
                           date_arrivee DATE NOT NULL,
                           disponibilite BOOLEAN DEFAULT TRUE,
-                          id_categorie INT REFERENCES categorie(id_categorie),
+                          id_categorie BIGINT REFERENCES categorie(id_categorie),
                           image_path VARCHAR(255)
 );
 
 CREATE TABLE image_vehicule (
-                                id_image SERIAL PRIMARY KEY,
-                                id_vehicule INT REFERENCES vehicule(id_vehicule),
+                                id_image BIGSERIAL PRIMARY KEY,
+                                id_vehicule BIGINT REFERENCES vehicule(id_vehicule),
                                 url_image VARCHAR(255) NOT NULL,
                                 est_principale BOOLEAN DEFAULT FALSE
 );
 
 CREATE TABLE option_vehicule (
-                                 id_option SERIAL PRIMARY KEY,
+                                 id_option BIGSERIAL PRIMARY KEY,
                                  nom VARCHAR(100) NOT NULL,
                                  description TEXT
 );
 
 CREATE TABLE vehicule_option (
-                                 id_vehicule INT REFERENCES vehicule(id_vehicule),
-                                 id_option INT REFERENCES option_vehicule(id_option),
+                                 id_vehicule BIGINT REFERENCES vehicule(id_vehicule),
+                                 id_option BIGINT REFERENCES option_vehicule(id_option),
                                  PRIMARY KEY (id_vehicule, id_option)
 );
 
