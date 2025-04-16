@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agence Auto Premium</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .card-img-top {
+            height: 200px;
+            object-fit: cover;
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="/">Agence Auto Premium</a>
+    </div>
+</nav>
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Nos véhicules</h1>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#vehiculeModal">
+            Ajouter un véhicule
+        </button>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4 mb-4" th:each="vehicule : ${vehicules}">
+            <div class="card h-100">
+                <img class="card-img-top" th:src="${vehicule.images != null and !vehicule.images.isEmpty ? vehicule.images[0].urlImage : 'https://via.placeholder.com/300x200?text=Pas+d%27image'}"
+                >
+                <div class="card-body">
+                    <h5 class="card-title" th:text="${vehicule.marque + ' ' + vehicule.modele}">Marque Modèle</h5>
+                    <p class="card-text">
+                        <strong>Année:</strong> <span th:text="${vehicule.annee}">2022</span><br>
+                        <strong>Prix:</strong> <span th:text="${#numbers.formatDecimal(vehicule.prix, 0, 'COMMA', 2, 'POINT')} + ' €'">25000.00 €</span><br>
+                        <strong>Kilométrage:</strong> <span th:text="${vehicule.kilometrage != null ? vehicule.kilometrage + ' km' : 'N/A'}">10000 km</span>
+                    </p>
+                </div>
+                <div class="card-footer">
+                    <a th:href="@{/vehicule/{id}(id=${vehicule.id})}" class="btn btn-info w-100">Voir les détails</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal pour ajouter un véhicule -->
+<div class="modal fade" id="vehiculeModal" tabindex="-1" aria-labelledby="vehiculeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="vehiculeModalLabel">Ajouter un nouveau véhicule</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form th:action="@{/vehicule/add}" th:object="${vehicule}" method="post">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="marque" class="form-label">Marque</label>
+                            <input type="text" class="form-control" id="marque" th:field="*{marque}" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="modele" class="form-label">Modèle</label>
+                            <input type="text" class="form-control" id="modele" th:field="*{modele}" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label for="annee" class="form-label">Année</label>
+                            <input type="number" class="form-control" id="annee" th:field="*{annee}" required>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="prix" class="form-label">Prix (€)</label>
+                            <input type="number" step="0.01" class="form-control" id="prix" th:field="*{prix}" required>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="kilometrage" class="form-label">Kilométrage</label>
+                            <input type="number" class="form-control" id="kilometrage" th:field="*{kilometrage}">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label for="couleur" class="form-label">Couleur</label>
+                            <input type="text" class="form-control" id="couleur" th:field="*{couleur}">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="carburant" class="form-label">Carburant</label>
+                            <select class="form-select" id="carburant" th:field="*{carburant}">
+                                <option value="">-- Sélectionner --</option>
+                                <option value="Essence">Essence</option>
+                                <option value="Diesel">Diesel</option>
+                                <option value="Hybride">Hybride</option>
+                                <option value="Électrique">Électrique</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="transmission" class="form-label">Transmission</label>
+                            <select class="form-select" id="transmission" th:field="*{transmission}">
+                                <option value="">-- Sélectionner --</option>
+                                <option value="Manuelle">Manuelle</option>
+                                <option value="Automatique">Automatique</option>
+                                <option value="Semi-automatique">Semi-automatique</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label for="puissance" class="form-label">Puissance (ch)</label>
+                            <input type="number" class="form-control" id="puissance" th:field="*{puissance}">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="nombrePlaces" class="form-label">Nombre de places</label>
+                            <input type="number" class="form-control" id="nombrePlaces" th:field="*{nombrePlaces}">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="categorie" class="form-label">Catégorie</label>
+                            <select class="form-select" id="categorie" th:field="*{categorie}">
+                                <option value="">-- Sélectionner une catégorie --</option>
+                                <option th:each="cat : ${categories}" th:value="${cat.id}" th:text="${cat.nom}"></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                        <button type="submit" class="btn btn-primary">Enregistrer</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Script pour réinitialiser le formulaire lorsque le modal est fermé
+    document.addEventListener('DOMContentLoaded', function() {
+        const vehiculeModal = document.getElementById('vehiculeModal');
+        if (vehiculeModal) {
+            vehiculeModal.addEventListener('hidden.bs.modal', function() {
+                const form = vehiculeModal.querySelector('form');
+                if (form) {
+                    form.reset();
+                }
+            });
+        }
+    });
+</script>
+</body>
+</html>

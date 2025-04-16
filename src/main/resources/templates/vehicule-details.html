@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${vehicule.marque + ' ' + vehicule.modele}">Détails du véhicule</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="/">Agence Auto Premium</a>
+    </div>
+</nav>
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-6">
+            <div id="carouselVehicule" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    <div th:if="${vehicule.images == null || vehicule.images.empty}" class="carousel-item active">
+                        <img src="https://via.placeholder.com/600x400?text=Pas+d%27image" class="d-block w-100" alt="Pas d'image">
+                    </div>
+                    <div th:each="image, iterStat : ${vehicule.images}"
+                         th:class="${iterStat.index == 0 ? 'carousel-item active' : 'carousel-item'}">
+                        <img th:src="${image.urlImage}" class="d-block w-100" alt="Image du véhicule">
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselVehicule" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Précédent</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselVehicule" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Suivant</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <h1 th:text="${vehicule.marque + ' ' + vehicule.modele}">Marque Modèle</h1>
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5>Informations générales</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>Année:</strong> <span th:text="${vehicule.annee}">2022</span></p>
+                            <p><strong>Prix:</strong> <span th:text="${#numbers.formatDecimal(vehicule.prix, 0, 'COMMA', 2, 'POINT')} + ' €'">25000.00 €</span></p>
+                            <p><strong>Kilométrage:</strong> <span th:text="${vehicule.kilometrage != null ? vehicule.kilometrage + ' km' : 'N/A'}">10000 km</span></p>
+                            <p><strong>Couleur:</strong> <span th:text="${vehicule.couleur != null ? vehicule.couleur : 'N/A'}">Noir</span></p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Carburant:</strong> <span th:text="${vehicule.carburant != null ? vehicule.carburant : 'N/A'}">Essence</span></p>
+                            <p><strong>Transmission:</strong> <span th:text="${vehicule.transmission != null ? vehicule.transmission : 'N/A'}">Automatique</span></p>
+                            <p><strong>Puissance:</strong> <span th:text="${vehicule.puissance != null ? vehicule.puissance + ' ch' : 'N/A'}">150 ch</span></p>
+                            <p><strong>Nombre de places:</strong> <span th:text="${vehicule.nombrePlaces != null ? vehicule.nombrePlaces : 'N/A'}">5
